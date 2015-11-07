@@ -3,7 +3,7 @@
 
     <groupId>com.github.dakusui</groupId>
     <artifactId>jcunit-theories</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <description>@Theories runner powered by JCUnit</description>
     <packaging>jar</packaging>
 
@@ -23,7 +23,7 @@
         <developerConnection>scm:git:git@github.com:dakusui/jcunit-theories.git
         </developerConnection>
         <url>http://jcunit-team.github.io/jcunit-theories</url>
-        <tag>jcunit-theories-0.0.9</tag>
+        <tag>jcunit-theories-0.1.0</tag>
     </scm>
 
     <developers>
