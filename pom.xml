@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>jcunit-theories</name>
-    <url>https://github.com/dakusui/jcunit-theories</url>
+    <url>https://github.com/jcunit-team/jcunit-theories</url>
 
     <licenses>
         <license>
@@ -19,10 +19,10 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git://github.com/dakusui/jcunit-theories.git</connection>
+        <connection>scm:git:git://github.com/jcunit-team/jcunit-theories.git</connection>
         <developerConnection>scm:git:git@github.com:dakusui/jcunit-theories.git
         </developerConnection>
-        <url>http://dakusui.github.io/jcunit-theories</url>
+        <url>http://jcunit-team.github.io/jcunit-theories</url>
         <tag>jcunit-theories-0.0.9</tag>
     </scm>
 

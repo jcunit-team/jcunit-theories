@@ -23,14 +23,9 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.junit.runners.model.TestClass;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.dakusui.jcunit.core.Checks.wrap;
@@ -100,59 +95,22 @@ public class Theories extends org.junit.contrib.theories.Theories {
     tg.setFactors(factorsBuilder.build());
     tg.init();
     return new TheoryAnchor(method, testClass) {
-      public List<Throwable> errors;
-      PrintStream ps;
       int successes = 0;
       int index = 0;
       List<AssumptionViolatedException> fInvalidParameters = new ArrayList<AssumptionViolatedException>();
 
       @Override
       public void evaluate() throws Throwable {
-        List<Integer> testIDsFailedLastTime = TheoriesUtils.readRecordFileOf(testClass, method);
-        ps = createPrintOutputStreamForTestResult(testClass, method);
-        try {
-          this.errors = new LinkedList<Throwable>();
-          if (testIDsFailedLastTime.isEmpty()) {
-            for (index = 0; index < tg.size(); index++) {
-              runWithCompleteAssignment(tuple2assignments(method.getMethod(), testClass, tg.get(index)));
-            }
-          } else {
-            for (Integer i : testIDsFailedLastTime) {
-              index = i;
-              runWithCompleteAssignment(tuple2assignments(method.getMethod(), testClass, tg.get(index)));
-            }
-          }
-          if (!this.errors.isEmpty()) {
-            for (Throwable each : this.errors) {
-              each.getMessage();
-            }
-            throw this.errors.get(0);
-          }
-        } finally {
-          ps.close();
+        for (index = 0; index < tg.size(); index++) {
+          runWithCompleteAssignment(tuple2assignments(method.getMethod(), testClass, tg.get(index)));
         }
+
         //if this test method is not annotated with Theory, then no successes is a valid case
         boolean hasTheoryAnnotation = method.getAnnotation(Theory.class) != null;
         if (successes == 0 && hasTheoryAnnotation) {
           Assert.fail("Never found parameters that satisfied method assumptions.  Violated assumptions: "
               + fInvalidParameters);
         }
-      }
-
-      @Override
-      protected void runWithCompleteAssignment(final Assignments complete) throws Throwable {
-        try {
-          super.runWithCompleteAssignment(complete);
-        } catch (Throwable t) {
-          this.errors.add(t);
-        }
-      }
-
-
-        @Override
-      protected void reportParameterizedError(Throwable e, Object... params) throws Throwable {
-        ps.println(this.index);
-        super.reportParameterizedError(e, params);
       }
 
       @Override
@@ -164,19 +122,7 @@ public class Theories extends org.junit.contrib.theories.Theories {
       protected void handleDataPointSuccess() {
         successes++;
       }
-    }
-
-        ;
-  }
-
-  private PrintStream createPrintOutputStreamForTestResult(TestClass testClass, FrameworkMethod method) {
-    try {
-      File outfile =TheoriesUtils.getFailedestsFileOf(testClass, method);
-      outfile.getParentFile().mkdirs();
-      return new PrintStream(new FileOutputStream(outfile));
-    } catch (FileNotFoundException e) {
-      throw wrap(e);
-    }
+    };
   }
 
 
